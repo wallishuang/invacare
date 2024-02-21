@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    name: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: postgres
+  template:
+    metadata:
+      labels:
+        service: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:10.1
+        volumeMounts:
+        - name: postgres-volume-mount
+          mountPath: /var/lib/postgresql/data
+        env:
+        - name: POSTGRES_DB
+          value: demo
+        - name: POSTGRES_USER
+          value: admin
+        - name: POSTGRES_PASSWORD
+          value: "123456"
+      restartPolicy: Always
+      volumes:
+      - name: postgres-volume-mount
+        hostPath:
+          path: /tmp/pgdata

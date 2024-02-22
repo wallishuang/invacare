@@ -1,4 +1,4 @@
-* 開發環境：
+* 開發及運行環境：
     - JDK: 17
     - Database: Postgres10
       

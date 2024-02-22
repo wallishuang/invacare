@@ -21,6 +21,11 @@ public class PolicyholderService {
 
 	@Autowired PolicyholderRepository repository;
 	
+	/**
+	 * 取得所有保戶編號
+	 * @return
+	 * @throws Exception
+	 */
 	public List<PolicyholderSelectorVO> getAllCode() throws Exception {
 		List<PolicyholderSelectorVO> reulst = new ArrayList<>();
 		List<Policyholder> modelList = repository.findCodeOrderById();
@@ -36,13 +41,21 @@ public class PolicyholderService {
 		return reulst;
 	}
 
+	/**
+	 * 依編號取得保戶資訊
+	 * @param code
+	 * @return
+	 * @throws Exception
+	 */
 	public PolicyholderVO getHolder(String code) throws Exception {
+		// 依編號取得保戶資訊
 		Policyholder entity = repository.findByCode(code);
 		if (entity == null) {
 			throw new DataNotFoundException("data not found");
 		}
 		PolicyholderVO vo = toVO(entity);
-
+		
+		// 依編號取得該保戶下的子節點
 		List<Policyholder> subEntities = repository.findByParentCodeOrderByParentPosition(code);
 		if (CollectionUtils.isEmpty(subEntities)) {
 			return vo;
@@ -50,7 +63,9 @@ public class PolicyholderService {
 
 		List<PolicyholderVO> voLeftList = new ArrayList<>();
 		List<PolicyholderVO> voRightList = new ArrayList<>();
+		
 		if (!CollectionUtils.isEmpty(subEntities)) {
+			// 遞迴尋找子節點是否能繼續往下，直到子節點沒有節點
 			for (Policyholder holder : subEntities) {
 				PolicyholderVO subVO = getHolder(holder.getCode());
 				if (subVO.getPosition().equals(Policyholder.POSITION.L.name())) {
@@ -67,6 +82,12 @@ public class PolicyholderService {
 		return vo;
 	}
 
+	/**
+	 * 依編號取得上層保戶資訊
+	 * @param code
+	 * @return
+	 * @throws Exception
+	 */
 	public PolicyholderVO getTopHolder(String code) throws Exception {
 		Policyholder entity = repository.findByCode(code);
 		if (entity == null) {
@@ -75,6 +96,11 @@ public class PolicyholderService {
 		return getHolder(entity.getParentCode());
 	}
 
+	/**
+	 * 新增保戶
+	 * @param createVO
+	 * @throws Exception
+	 */
 	public void addHolder(PolicyholderCreatedVO createVO) throws Exception {
 		Policyholder entity = new Policyholder();
 		entity.setName(createVO.getName());
@@ -101,6 +127,13 @@ public class PolicyholderService {
 		repository.save(responseEntity);
 	}
 	
+	/**
+	 * 為新保戶尋找可用的父節點，如果沒有介紹人則依序從根節點開始，從左至右向下增加
+	 * @param entity　新增保戶物件
+	 * @param introCode　介紹人編號
+	 * @param isSameLevel　目前查詢的進度是否為同一個階層
+	 * @return
+	 */
 	private Policyholder findAvalibleParentCode(Policyholder entity, String introCode, boolean isSameLevel) {
 		List<Policyholder> children = repository.findByParentCodeOrderByParentPosition(introCode);
 		if(CollectionUtils.isEmpty(children)) {

@@ -12,7 +12,7 @@ public interface PolicyholderRepository extends CrudRepository<Policyholder, Str
 	@Query("SELECT c FROM Policyholder c ORDER BY c.id")
 	public List<Policyholder> findCodeOrderById();
 	
-	@Query("SELECT c FROM Policyholder c WHERE c.parentCode IS NULL")
+	@Query("SELECT c FROM Policyholder c WHERE c.parentCode IS NULL OR c.parentCode = ''")
 	public Policyholder findRootCode();
 	
 }

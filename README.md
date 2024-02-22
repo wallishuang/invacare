@@ -1,3 +1,6 @@
+* 作業需求:
+  - https://clinicodev.notion.site/ed6de696d7594770ab7f515cad0ba6a9  
+
 * 開發及運行環境：
     - JDK: 17
     - Database: Postgres10

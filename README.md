@@ -8,7 +8,6 @@
 * 開發文件：
     - Table Schema:  https://github.com/wallishuang/invacare/blob/main/setup/invacare.sql  
     - Swagger Doc Url : http://localhost:8080/swagger-ui/index.html
-    - 連上我的本機(但不一定會開) http://f6594fab573bb642c6312da6b1c3b723.serveo.net/swagger-ui/index.html#
       
 * 執行檔案
     - java -jar invacare-0.0.1-SNAPSHOT.jar  

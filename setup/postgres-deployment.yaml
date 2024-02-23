@@ -31,4 +31,4 @@ spec:
       volumes:
       - name: postgres-volume-mount
         hostPath:
-          path: /tmp/pgdata
+          path: /run/desktop/mnt/host/c/tmp/pgdata

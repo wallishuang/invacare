@@ -3,6 +3,7 @@ package com.interview.invacare.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,7 +46,7 @@ public class PolicyholderController {
 	@Operation(summary = "新增保戶編號")
 	@PostMapping
 	@GetMapping("/api/policyholders")
-	public void createHolder(@RequestBody PolicyholderCreatedVO vo) throws Exception {
+	public void createHolder(@RequestBody @Validated PolicyholderCreatedVO vo) throws Exception {
 		service.addHolder(vo);
 	}
 

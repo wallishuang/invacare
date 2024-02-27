@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 public interface PolicyholderRepository extends CrudRepository<Policyholder, String> {
+	public List<Policyholder> findAll();
 	public Policyholder findByCode(String code);
 	public List<Policyholder> findByParentCodeOrderByParentPosition(String ParentCode);
 	

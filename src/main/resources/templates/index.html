@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Registration</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous">
+	
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript" th:inline="javascript">
+		var chartData = [[${orgChartDataList}]];
+		google.charts.load('current', {packages:["orgchart"]});
+      	google.charts.setOnLoadCallback(drawChart);
+		function drawChart() {
+			// Create the data table.        
+			var data = new google.visualization.DataTable();
+			data.addColumn('string', 'Name');
+			data.addColumn('string', 'Manager');
+			data.addColumn('string', 'ToolTip');		
+			
+			chartData.forEach(c => 
+				data.addRow([ {'v': c.code, 'f': c.code+'<div style="color:red; font-style:italic">'+c.name+'</div>'}, 
+				c.parentCode, 
+				'介紹人編號: '+c.introducerCode]));
+			
+			var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
+			chart.draw(data, {'allowHtml':true});
+		}
+	</script>
+    </head>
+
+</head>
+<body>
+	<!-- create navigation bar ( header) -->
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#" th:href="@{/}">保戶操作</a>
+			</div>
+		</div>
+	</nav>
+
+<br>
+<br>
+	<!-- Create HTML registration form -->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+
+				<h1>註冊保戶</h1>
+				<form th:action="@{/adduser}" method="post" th:object="${createUser}">
+					<div class="form-group">
+						<label class="control-label" for="name"> 姓名 </label>
+						<input id="name" class="form-control" th:field="*{name}"
+							required autofocus="autofocus" />
+					</div>
+
+					<div class="form-group">
+						<label class="control-label" for="introducerCode"> 介紹人編號 </label> <input
+							id="introducerCode" class="form-control" th:field="*{introducerCode}"
+							 autofocus="autofocus" />
+					</div>
+
+					<div class="form-group">
+						<button type="submit" class="btn btn-success">註冊</button>						
+					</div>
+				</form>
+				
+				<h1>查詢保戶</h1>
+				<form th:action="@{/queryuser}" method="get" >
+					<div class="form-group">
+						<label class="control-label" for="name"> 查詢編號 </label>
+						<input id="code" name="code" class="form-control" autofocus="autofocus" />
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-success">查詢</button>						
+					</div>					
+				</form>
+				
+				<h2>保戶組織圖</h2>				
+        		<div class="container">
+					<div id="chart_div" class=".level-2-wrapper" ></div>
+                </div>
+				
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>

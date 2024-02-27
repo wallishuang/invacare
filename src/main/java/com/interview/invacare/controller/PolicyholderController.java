@@ -44,8 +44,7 @@ public class PolicyholderController {
 	}
 
 	@Operation(summary = "新增保戶編號")
-	@PostMapping
-	@GetMapping("/api/policyholders")
+	@PostMapping("/api/policyholders")
 	public void createHolder(@RequestBody @Validated PolicyholderCreatedVO vo) throws Exception {
 		service.addHolder(vo);
 	}
